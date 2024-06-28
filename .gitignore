@@ -25,3 +25,4 @@ dist-ssr
 *main.js
 *main_*.js
 dump*
+mongosh-2.2.10-linux-x64*
