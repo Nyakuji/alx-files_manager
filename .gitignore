@@ -24,3 +24,4 @@ dist-ssr
 *.sw?
 *main.js
 *main_*.js
+dump*
