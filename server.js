@@ -11,4 +11,7 @@ app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
 
+// Run worker
+require('./worker');
+
 module.exports = app;
