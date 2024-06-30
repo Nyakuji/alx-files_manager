@@ -3,11 +3,14 @@ module.exports = {
     env: {
       browser: false,
       es6: true,
+      node: true,
+      mocha: true,
       jest: true,
     },
     extends: [
       'airbnb-base',
-      'plugin:jest/all',
+      "eslint:recommended",
+      "plugin:chai-friendly/recommended",
     ],
     globals: {
       Atomics: 'readonly',
@@ -17,11 +20,12 @@ module.exports = {
       ecmaVersion: 2018,
       sourceType: 'module',
     },
-    plugins: ['jest'],
+    plugins: ['chai-friendly'],
     rules: {
       'max-classes-per-file': 'off',
       'no-underscore-dangle': 'off',
       'no-console': 'off',
+      'no-unused-expressions':0,
       'no-shadow': 'off',
       'no-restricted-syntax': [
         'error',
@@ -33,6 +37,6 @@ module.exports = {
       {
         files: ['*.js'],
         excludedFiles: 'babel.config.js',
-      }
-    ]
+      },
+    ],
 };
