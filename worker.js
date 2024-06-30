@@ -4,8 +4,13 @@ const fs = require('fs').promises;
 const { ObjectId } = require('mongodb');
 const dbClient = require('./utils/db');
 
+// Create the fileQueue
 const fileQueue = new Queue('fileQueue');
 
+// Create the userQueue
+const userQueue = new Queue('userQueue');
+
+// Process the fileQueue for thumbnail generation
 fileQueue.process('thumbnailGeneration', async (job, done) => {
   const { fileId, userId } = job.data;
 
@@ -38,3 +43,34 @@ fileQueue.on('completed', (job) => {
 fileQueue.on('failed', (job, err) => {
   console.error(`Job ${job.id} failed: ${err.message}`);
 });
+
+// Process the userQueue for sending welcome emails
+userQueue.process(async (job, done) => {
+  const { userId } = job.data;
+
+  if (!userId) {
+    done(new Error('Missing userId'));
+    return;
+  }
+
+  const user = await dbClient.db.collection('users').findOne({ _id: new ObjectId(userId) });
+
+  if (!user) {
+    done(new Error('User not found'));
+    return;
+  }
+
+  console.log(`Welcome ${user.email}!`);
+
+  done();
+});
+
+userQueue.on('completed', (job) => {
+  console.log(`Job ${job.id} completed`);
+});
+
+userQueue.on('failed', (job, err) => {
+  console.error(`Job ${job.id} failed: ${err.message}`);
+});
+
+module.exports = { fileQueue, userQueue };
